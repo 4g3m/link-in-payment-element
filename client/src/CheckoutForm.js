@@ -10,9 +10,7 @@ export default function CheckoutForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!stripe || !elements) return;
-
     setIsLoading(true);
 
     const { error } = await stripe.confirmPayment({
@@ -33,7 +31,9 @@ export default function CheckoutForm() {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement />
+      <PaymentElement options={{
+        wallets: { applePay: 'auto', googlePay: 'auto' }
+      }} />
       <button disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner">...</div> : "Buy today"}
