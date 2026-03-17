@@ -6,7 +6,7 @@ const {resolve} = require('path');
 const env = require('dotenv').config({path: './.env'});
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2020-08-27;link_beta=v1',
+  apiVersion: '2023-10-16',
 });
 const LINK_PERSISTENT_TOKEN_COOKIE_NAME = 'stripe.link.persistent_token';
 
@@ -44,28 +44,22 @@ app.get('/create-payment-intent', async (req, res) => {
   console.log(req.cookies);
   try {
     const ephemeralKey = await stripe.ephemeralKeys.create(
-      {customer: 'cus_Lexth1xyUzOfhc'},
-      {apiVersion: '2020-08-27'}
+      {customer: 'cus_UA6a1w0f4xBdk9'},
+      {apiVersion: '2023-10-16'}
     );
 
     const paymentIntent = await stripe.paymentIntents.create({
       currency: 'usd',
       amount: 5999,
-      customer: 'cus_Lexth1xyUzOfhc',
-      payment_method_types: ['card', 'us_bank_account', 'link'],
-      payment_method_options: {
-        link: {
-          persistent_token: req.cookies[LINK_PERSISTENT_TOKEN_COOKIE_NAME],
-        }
-      }
-      // automatic_payment_methods: { enabled: true }
+      customer: 'cus_UA6a1w0f4xBdk9',
+      automatic_payment_methods: { enabled: true }
     });
 
     // Send publishable key and PaymentIntent details to client
     res.send({
       clientSecret: paymentIntent.client_secret,
       customerOptions: {
-        customer: 'cus_Lexth1xyUzOfhc',
+        customer: 'cus_UA6a1w0f4xBdk9',
         ephemeralKey: ephemeralKey.secret
       }
     });

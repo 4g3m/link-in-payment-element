@@ -13,10 +13,7 @@ function App() {
   useEffect(() => {
     fetch("/config").then(async (r) => {
       const { publishableKey } = await r.json();
-      setStripePromise(loadStripe(publishableKey, {
-        betas: ['link_beta_3', 'elements_customers_beta_1'],
-        apiVersion: '2020-08-27;link_beta=v1'
-      }));
+      setStripePromise(loadStripe(publishableKey));
     });
   }, []);
 
